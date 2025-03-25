@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiMonitor, FiSearch, FiChevronRight, FiPlus } from "react-icons/fi";
 import { FaQrcode } from "react-icons/fa";
-import QRModal from "../components/QRModal.jsx";
+import QRModal from "../components/QrModal.jsx";
 import { getArticulosRequest } from "../api/articles.js";
 
 function ComputersPage() {
