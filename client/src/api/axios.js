@@ -1,7 +1,7 @@
 import axios from "axios";
 
 /* La url del servidor */
-const API_URL = import.meta.env.API_URL;
+const API_URL = `${import.meta.env.API_URL}/api`;
 
 /* Crear una instancia de axios */
 const instance = axios.create({
