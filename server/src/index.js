@@ -37,6 +37,6 @@ server.use('*', (req, res) => {
 })
 
 /* Escuchamos el servidor */
-server.listen(port, () => {
-  console.log("Server is running on: " + port);
+server.listen(() => {
+  console.log("Server is running");
 });
