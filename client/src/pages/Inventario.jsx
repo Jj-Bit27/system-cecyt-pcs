@@ -9,6 +9,8 @@ import {
   FiInfo,
 } from "react-icons/fi";
 import { getArticulosRequest } from "../api/articles";
+import { FaQrcode } from "react-icons/fa";
+import QRModal from "../components/QrModal.jsx";
 
 function InventarioPage() {
   const navigate = useNavigate();
@@ -21,6 +23,11 @@ function InventarioPage() {
     articulo: "",
   });
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  const [qrModal, setQrModal] = useState({
+    show: false,
+    computerId: "",
+    computerName: "",
+  });
 
   useEffect(() => {
     setTimeout(async () => {
@@ -62,6 +69,24 @@ function InventarioPage() {
     });
   };
 
+  // Función para manejar el clic en el botón Generar QR (placeholder)
+  const handleGenerateQR = (e, article) => {
+    e.stopPropagation();
+    setQrModal({
+      show: true,
+      computerId: article.id,
+      computerName: `${article.marca} ${article.modelo} (${article.num_inventario})`,
+    });
+  };
+
+  const closeQrModal = () => {
+    setQrModal({
+      show: false,
+      computerId: "",
+      computerName: "",
+    });
+  };
+
   // Función para obtener el color según el estado
   const getEstadoColor = (estado) => {
     switch (estado) {
@@ -82,7 +107,7 @@ function InventarioPage() {
         <div className="flex items-center justify-between mb-6 mt-4">
           <h1 className="text-xl font-bold">Inventario de Artículos</h1>
           <button
-            onClick={() => navigate("/article/new")} // Ajustado para React Router
+            onClick={() => navigate("/article/new")}
             className="flex items-center gap-1 bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600 transition-colors"
           >
             <FiPlus />
@@ -212,13 +237,16 @@ function InventarioPage() {
                       <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Acciones
                       </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        QR
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {inventarioFiltrado.length === 0 ? (
                       <tr>
                         <td
-                          colSpan={6}
+                          colSpan={7}
                           className="px-4 py-4 text-center text-gray-500"
                         >
                           No se encontraron artículos
@@ -247,12 +275,21 @@ function InventarioPage() {
                           <td className="px-4 py-3 capitalize">
                             {item.tipo_uso}
                           </td>
-                          <td className="px-4 py-3">
+                          <td className="px-4 py-3 flex gap-2">
                             <button
-                              onClick={() => navigate(`/details/${item.id}`)} // Ajustado para React Router
+                              onClick={() => navigate(`/details/${item.id}`)}
                               className="text-blue-500 hover:text-blue-700"
                             >
                               <FiInfo className="w-5 h-5" />
+                            </button>
+                          </td>
+                          <td className="px-4 py-3">
+                            <button
+                              onClick={(e) => handleGenerateQR(e, item)}
+                              className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-200 transition-colors text-xs"
+                            >
+                              <FaQrcode className="text-gray-500" />
+                              Generar QR
                             </button>
                           </td>
                         </tr>
@@ -274,7 +311,6 @@ function InventarioPage() {
                       <div
                         key={item.id}
                         className="bg-white border rounded-lg p-4 hover:bg-gray-50 transition-colors"
-                        onClick={() => navigate(`/details/${item.id}`)} // Ajustado para React Router
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
@@ -286,7 +322,10 @@ function InventarioPage() {
                               </p>
                             </div>
                           </div>
-                          <FiChevronRight className="text-gray-400" />
+                          <FiChevronRight
+                            className="text-gray-400"
+                            onClick={() => navigate(`/details/${item.id}`)}
+                          />
                         </div>
                         <div className="mt-2 flex flex-wrap gap-2">
                           <span className="text-xs text-gray-500">
@@ -303,6 +342,15 @@ function InventarioPage() {
                             {item.tipo_uso}
                           </span>
                         </div>
+                        <div className="mt-3 flex items-center gap-2">
+                          <button
+                            onClick={(e) => handleGenerateQR(e, item)}
+                            className="flex items-center gap-1 bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200 transition-colors"
+                          >
+                            <FaQrcode className="text-gray-500" />
+                            Generar QR
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -312,6 +360,14 @@ function InventarioPage() {
           )}
         </div>
       </div>
+      {/* Modal para mostrar el código QR */}
+      {qrModal.show && (
+        <QRModal
+          computerId={qrModal.computerId}
+          computerName={qrModal.computerName}
+          onClose={closeQrModal}
+        />
+      )}
     </main>
   );
 }

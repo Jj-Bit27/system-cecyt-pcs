@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { FiX, FiDownload, FiPrinter } from "react-icons/fi";
-import { QRCodeCanvas } from "qrcode.react"; // Cambia 'QRCode' por 'QRCodeCanvas'
-import { FaQrcode } from "react-icons/fa";
+import { QRCodeCanvas } from "qrcode.react";
 
 function QRModal({ computerId, computerName, onClose }) {
   const qrRef = useRef(null);
@@ -94,7 +93,7 @@ function QRModal({ computerId, computerName, onClose }) {
         <div className="p-6 flex flex-col items-center" ref={qrRef}>
           <QRCodeCanvas
             id="computer-qr-code"
-            value={computerId}
+            value={`${computerId}`}
             size={200}
             level="H"
           />

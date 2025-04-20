@@ -11,11 +11,12 @@ function QrScanner({ onScan }) {
     const startScanner = async () => {
       try {
         setIsLoading(true);
+
         await html5QrCode.start(
           { facingMode: "environment" },
           {
             fps: 10,
-            qrbox: { width: 250, height: 250 }, // Cuadrado perfecto
+            qrbox: { width: 250, height: 250 },
           },
           (decodedText) => {
             onScan(decodedText);
@@ -25,10 +26,11 @@ function QrScanner({ onScan }) {
             console.log(errorMessage);
           }
         );
+
         setIsLoading(false);
       } catch (err) {
-        console.error("Error starting scanner:", err);
         setIsLoading(false);
+        console.error("Error starting scanner:", err);
       }
     };
 
@@ -59,6 +61,7 @@ function QrScanner({ onScan }) {
           </div>
         )}
       </div>
+
       <p className="text-sm text-gray-500 mt-2 text-center">
         Posicione el código QR dentro del recuadro
       </p>
