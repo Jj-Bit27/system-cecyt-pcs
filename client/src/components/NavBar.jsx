@@ -42,7 +42,7 @@ function Navbar() {
                 />
               </div>
               <span className="font-bold text-xl">
-                CECyTT Registro De Computadoras
+                CECyT Registro De Computadoras
               </span>
             </NavLink>
 
